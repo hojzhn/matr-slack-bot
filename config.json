@@ -97,7 +97,59 @@
     "list_id": "F0B6Y7GQK5J",
     "command": "/newproject",
     "title": "New Project",
-    "hidden_columns": ["Status", "PrintAt"],
+    "notify_channel": "C0B6WF3KUD7",
+    "fields": [
+      {
+        "column": "Task",
+        "label": "Item Name",
+        "required": true,
+        "placeholder": "Project Name"
+      },
+      {
+        "column": "Assignee",
+        "required": false,
+        "placeholder": "Select a teammate"
+      },
+      {
+        "column": "Priority",
+        "required": false,
+        "placeholder": "Select a priority"
+      },
+      {
+        "column": "Customer",
+        "required": false,
+        "placeholder": "Customer name"
+      },
+      {
+        "column": "Due date",
+        "required": false,
+        "placeholder": "Select a due date"
+      },
+      {
+        "column": "File",
+        "label": "File",
+        "required": false,
+        "input": "file",
+        "max_files": 1
+      },
+      { "column": "Type", "required": true, "placeholder": "Select a type" },
+      { "column": "Height (in)", "required": true, "placeholder": "e.g. 24" },
+      { "column": "Width (in)", "required": true, "placeholder": "e.g. 18" },
+      {
+        "column": "Description",
+        "required": false,
+        "input": "richtext",
+        "placeholder": "Notes, specs, links…"
+      }
+    ],
+    "size_select": {
+      "enabled": true,
+      "width_column": "Width (in)",
+      "height_column": "Height (in)",
+      "unit": "in"
+    },
+    "created_by_column": "Created By",
+    "placeholder_image_url": "https://placehold.co/128x128?text=No+File",
     "column_defaults": {}
   }
 }

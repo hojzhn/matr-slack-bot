@@ -63,16 +63,24 @@ class MarginPreset:
 class ProjectList:
     """Target Slack List for the ``/newproject`` cog.
 
-    ``hidden_columns`` are kept out of the modal; ``column_defaults`` maps a
-    column (by name or id) to a value written automatically on create. Both are
-    matched leniently (case/space-insensitive on the column name, or exact id).
+    ``fields`` is the ordered allow-list of columns to show in the modal — each
+    ``{"column", "label"?, "required"?}`` (``column`` matched leniently by name
+    or exact id; ``label`` overrides the display name). If empty, every editable
+    column is auto-rendered. ``column_defaults`` maps a column (by name or id) to
+    a value written automatically on create — used for columns kept *out* of the
+    modal (e.g. Status, PrintAt). ``notify_channel`` (optional) gets a message
+    when an item is created.
     """
 
     list_id: str
     command: str
     title: str
-    hidden_columns: tuple[str, ...]
+    notify_channel: str | None
+    fields: tuple
     column_defaults: dict
+    size_select: dict | None
+    created_by_column: str | None
+    placeholder_image_url: str | None
 
 
 @dataclass(frozen=True)
@@ -154,8 +162,12 @@ def _parse(raw: dict) -> Config:
             list_id=pl["list_id"],
             command=pl.get("command", "/newproject"),
             title=pl.get("title", "New Project"),
-            hidden_columns=tuple(pl.get("hidden_columns", [])),
+            notify_channel=pl.get("notify_channel"),
+            fields=tuple(pl.get("fields", [])),
             column_defaults=dict(pl.get("column_defaults", {})),
+            size_select=pl.get("size_select"),
+            created_by_column=pl.get("created_by_column"),
+            placeholder_image_url=pl.get("placeholder_image_url"),
         )
         if pl
         else None

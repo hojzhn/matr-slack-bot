@@ -1,13 +1,7 @@
-"""Dumb view builders for ``/calc`` — data in, Block Kit out.
-
-No config loading, no conversion, no validation. The cog resolves the selected
-presets/values (incl. unit conversion and dx/dy defaults) and passes them in;
-these functions only render. The block_id / action_id / callback_id constants
-live here because they're part of the view contract — the cog imports them to
-read state and register handlers.
-"""
 
 import json
+
+from ui.components import size_select_block
 
 CALLBACK_ID = "calc_submit"
 
@@ -69,19 +63,13 @@ def build_input_modal(
     selected_margin=None,
     values=None,
 ):
-    """Render the input modal from a resolved ``config`` and the current selections.
 
-    ``selected_*`` pre-select the radio/dropdowns and ``values`` (block_id ->
-    string) restores typed numbers — both used when the view is re-rendered after
-    a unit/size/margin change so nothing is lost.
-    """
     selected_origin = selected_origin or config.default_origin_value
     selected_size = selected_size or config.default_size_value
     selected_margin = selected_margin or config.default_margin_value
     values = dict(values or {})
 
     origin = config.origin(selected_origin)
-    size = config.size_preset(selected_size)
     margin = config.margin_preset(selected_margin)
     u = selected_unit
 
@@ -101,14 +89,18 @@ def build_input_modal(
                 "options": [_option("in", _unit_label("in")), _option("mm", _unit_label("mm"))],
             },
         },
-        _select_block("origin", ORIGIN_ACTION_ID, "Machine origin", config.origins, origin),
-        _select_block(
-            "size", SIZE_ACTION_ID, "Size preset", config.size_presets, size, dispatch=True
-        ),
+
         _number_input("width", f"Width ({u})", values.get("width")),
+
         _number_input("height", f"Height ({u})", values.get("height")),
-        _select_block(
-            "margin", MARGIN_ACTION_ID, "Margin", config.margin_presets, margin, dispatch=True
+
+        size_select_block(
+            config.size_presets,
+            selected_size,
+            block_id="size",
+            action_id=SIZE_ACTION_ID,
+            label="Size preset",
+            dispatch=True,
         ),
     ]
 
@@ -116,6 +108,16 @@ def build_input_modal(
         blocks.append(
             _number_input("margin_custom", f"Custom margin ({u})", values.get("margin_custom"))
         )
+
+    blocks += [
+        {"type": "divider"},
+        
+        _select_block("origin", ORIGIN_ACTION_ID, "Machine origin", config.origins, origin),
+
+        _select_block(
+            "margin", MARGIN_ACTION_ID, "Margin", config.margin_presets, margin, dispatch=True
+        ),
+    ]
 
     blocks += [
         {"type": "divider"},
