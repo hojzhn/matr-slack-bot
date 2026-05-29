@@ -1,0 +1,103 @@
+{
+  "origins": [
+    {
+      "value": "m3",
+      "label": "M3",
+      "x0_mm": 409.0,
+      "y0_mm": 98.0,
+      "is_default": true
+    }
+  ],
+  "size_presets": [
+    {
+      "value": "custom",
+      "label": "Custom (enter manually)",
+      "width_mm": null,
+      "height_mm": null,
+      "is_default": true
+    },
+    {
+      "value": "small_square",
+      "label": "Small Square (18 × 18 in)",
+      "width_mm": 457.2,
+      "height_mm": 457.2
+    },
+    {
+      "value": "small_portrait",
+      "label": "Small Portrait (16 × 20 in)",
+      "width_mm": 406.4,
+      "height_mm": 508.0
+    },
+    {
+      "value": "small_landscape",
+      "label": "Small Landscape (20 × 16 in)",
+      "width_mm": 508.0,
+      "height_mm": 406.4
+    },
+    {
+      "value": "medium_square",
+      "label": "Medium Square (24 × 24 in)",
+      "width_mm": 609.6,
+      "height_mm": 609.6
+    },
+    {
+      "value": "medium_portrait",
+      "label": "Medium Portrait (18 × 24 in)",
+      "width_mm": 457.2,
+      "height_mm": 609.6
+    },
+    {
+      "value": "medium_landscape",
+      "label": "Medium Landscape (24 × 18 in)",
+      "width_mm": 609.6,
+      "height_mm": 457.2
+    },
+    {
+      "value": "large_square",
+      "label": "Large Square (30 × 30 in)",
+      "width_mm": 762.0,
+      "height_mm": 762.0
+    },
+    {
+      "value": "large_portrait",
+      "label": "Large Portrait (24 × 30 in)",
+      "width_mm": 609.6,
+      "height_mm": 762.0
+    },
+    {
+      "value": "large_landscape",
+      "label": "Large Landscape (30 × 24 in)",
+      "width_mm": 762.0,
+      "height_mm": 609.6
+    }
+  ],
+  "margin_presets": [
+    {
+      "value": "default",
+      "label": "Default (0.5 in)",
+      "margin_mm": 12.7,
+      "is_default": true
+    },
+    {
+      "value": "wide",
+      "label": "Wide (0.75 in)",
+      "margin_mm": 19.05
+    },
+    {
+      "value": "custom",
+      "label": "Custom…",
+      "margin_mm": null
+    }
+  ],
+  "defaults": {
+    "delta_x_mm": 0.0,
+    "delta_y_mm": 0.0
+  },
+  "project_list": {
+    "list_id": "F0B6Y7GQK5J",
+    "command": "/newproject",
+    "title": "New Project",
+    "hidden_columns": ["Status", "PrintAt"],
+    "column_defaults": {}
+  }
+}
