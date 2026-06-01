@@ -1,4 +1,3 @@
-"""Hello cog — handles the ``/hello`` slash command."""
 
 from services.greeting import build_greeting
 

@@ -1,5 +1,3 @@
-"""Greeting logic — pure, no Slack-specific objects, easy to unit test."""
-
 
 def build_greeting(user_id, text=""):
     """Build the reply text for the /hello command."""

@@ -1,15 +1,3 @@
-"""App configuration — loaded from ``config.json``.
-
-Settings that should be tweakable *without a code change* live in
-``production-support/config.json`` (machine origins, default sizes, margin
-presets, delta defaults). This module loads that file once, validates it into
-typed objects, and exposes read-only accessors.
-
-Dependency-free (stdlib ``json`` only) so it can be imported from any layer.
-All distances are in millimetres (mm-canonical, matching the rest of the code).
-
-To reload after editing the file at runtime, call ``load_config.cache_clear()``.
-"""
 
 from __future__ import annotations
 
@@ -24,7 +12,7 @@ CONFIG_PATH = Path(__file__).resolve().parent.parent / "config.json"
 
 @dataclass(frozen=True)
 class Origin:
-    """A selectable machine origin (mm) that positions are measured from."""
+
 
     value: str
     label: str
@@ -34,7 +22,7 @@ class Origin:
 
 @dataclass(frozen=True)
 class SizePreset:
-    """A selectable job size. ``None`` dimensions mark the manual ("custom") option."""
+
 
     value: str
     label: str
@@ -48,7 +36,7 @@ class SizePreset:
 
 @dataclass(frozen=True)
 class MarginPreset:
-    """A selectable margin. ``margin_mm`` is a fixed margin in mm; ``None`` = custom."""
+
 
     value: str
     label: str
@@ -61,16 +49,7 @@ class MarginPreset:
 
 @dataclass(frozen=True)
 class ProjectList:
-    """Target Slack List for the ``/newproject`` cog.
 
-    ``fields`` is the ordered allow-list of columns to show in the modal — each
-    ``{"column", "label"?, "required"?}`` (``column`` matched leniently by name
-    or exact id; ``label`` overrides the display name). If empty, every editable
-    column is auto-rendered. ``column_defaults`` maps a column (by name or id) to
-    a value written automatically on create — used for columns kept *out* of the
-    modal (e.g. Status, PrintAt). ``notify_channel`` (optional) gets a message
-    when an item is created.
-    """
 
     list_id: str
     command: str
@@ -113,7 +92,7 @@ def _lookup(items, value, what):
 
 
 def _default_value(items, raw_items):
-    """Return the ``value`` of the entry flagged ``is_default``, else the first."""
+
     for item, raw in zip(items, raw_items):
         if raw.get("is_default"):
             return item.value
@@ -188,6 +167,6 @@ def _parse(raw: dict) -> Config:
 
 @lru_cache(maxsize=1)
 def load_config() -> Config:
-    """Load and cache ``config.json``. Call ``.cache_clear()`` to force a reload."""
+
     with open(CONFIG_PATH, encoding="utf-8") as f:
         return _parse(json.load(f))

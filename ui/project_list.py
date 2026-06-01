@@ -1,15 +1,14 @@
-"""Dumb view builders for ``/newproject`` — data in, Block Kit out.
-
-No Slack client, no config, no schema fetching. The cog parses the list schema,
-decides which columns are visible vs. hidden-with-defaults, and passes plain
-column dicts in; these functions only render. A column dict may carry: ``label``
-(display override), ``required``, ``placeholder``, and ``input``/``filetypes``/
-``max_files`` (for a file-upload field).
-"""
 
 import json
 
+from ui.components import size_select_block
+
 CALLBACK_ID = "project_create"
+
+DETAILS_ACTION = "project_details_link"
+
+SIZE_PRESET_BLOCK = "size_preset"
+SIZE_PRESET_ACTION = "project_size_select"
 
 
 def _is_file_input(col):
@@ -74,7 +73,7 @@ def _input_element(col):
 
 
 def _col_meta(col):
-    """The per-column info stashed in private_metadata for the submit handler."""
+
     meta = {"id": col["id"], "type": col["type"]}
     if _is_file_input(col):
         meta["input"] = "file"
@@ -86,15 +85,7 @@ def _col_meta(col):
 def build_create_modal(
     columns, list_id, title="New Project", hidden_defaults=None, extra_meta=None, lead_blocks=None
 ):
-    """Render the create modal for the given (visible) ``columns``.
 
-    ``lead_blocks`` are extra blocks rendered before the column inputs (e.g. the
-    shared size-preset selector). ``hidden_defaults`` are ``{id, type, value}``
-    for columns kept out of the modal but written on submit; ``extra_meta`` is
-    merged into private_metadata (e.g. which column is the name/assignee, for the
-    notification). Everything is stashed in private_metadata so the submit handler
-    needs no schema re-fetch.
-    """
     blocks = list(lead_blocks or [])
     blocks += [
         {
@@ -124,6 +115,47 @@ def build_create_modal(
     }
 
 
+def _thumbnail_accessory(thumb, placeholder_url):
+    """Image accessory for the card: the uploaded image, else a placeholder."""
+    if thumb and thumb.get("id"):
+        return {"type": "image", "slack_file": {"id": thumb["id"]}, "alt_text": "attachment"}
+    if placeholder_url:
+        return {"type": "image", "image_url": placeholder_url, "alt_text": "no file attached"}
+    return None
+
+
+def build_notification(name, assignee, creator, thumb, placeholder_url, item_url=None):
+
+    lines = [f"*{name or 'Untitled'}*"]
+    if assignee:
+        lines.append(f"Assigned to <@{assignee}>")
+    if creator:
+        lines.append(f"Added by <@{creator}>")
+    section = {"type": "section", "text": {"type": "mrkdwn", "text": "\n".join(lines)}}
+    accessory = _thumbnail_accessory(thumb, placeholder_url)
+    if accessory:
+        section["accessory"] = accessory
+    blocks = [
+        {"type": "header", "text": {"type": "plain_text", "text": "New item created"}},
+        section,
+    ]
+    if item_url:
+        blocks.append(
+            {
+                "type": "actions",
+                "elements": [
+                    {
+                        "type": "button",
+                        "text": {"type": "plain_text", "text": "Details"},
+                        "url": item_url,
+                        "action_id": DETAILS_ACTION,
+                    }
+                ],
+            }
+        )
+    return blocks
+
+
 def build_info_modal(title, message):
     return {
         "type": "modal",
@@ -131,3 +163,31 @@ def build_info_modal(title, message):
         "close": {"type": "plain_text", "text": "Done"},
         "blocks": [{"type": "section", "text": {"type": "mrkdwn", "text": message}}],
     }
+
+
+def build_size_preset_block(size_presets):
+    return size_select_block(
+        size_presets,
+        "",
+        block_id=SIZE_PRESET_BLOCK,
+        action_id=SIZE_PRESET_ACTION,
+        label="Size preset (fills Width / Height)",
+        optional=True,
+    )
+
+
+def api_error_message(err, needed=None):
+    if err == "missing_scope":
+        return (
+            f"The bot is missing the *{needed or 'required'}* scope. Add it under "
+            "*OAuth & Permissions → Bot Token Scopes*, then reinstall the app."
+        )
+    if err in ("not_visible", "file_not_found", "list_not_found", "no_permission"):
+        return (
+            "The bot can't access this List. Open the List in Slack → *Share*, "
+            "and give the bot (or a channel it's in) access — then try again."
+        )
+    return f"Slack API error:\n`{err}`"
+
+
+SIZE_INCOMPLETE_MESSAGE = "Pick a size, or enter Width and Height below"

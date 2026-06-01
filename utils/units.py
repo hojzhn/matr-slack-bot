@@ -50,10 +50,7 @@ _FROM_MM = {
 
 
 def convert(value, from_unit, to_unit, dpi=DEFAULT_DPI):
-    """Convert `value` from `from_unit` to `to_unit`.
 
-    Supported units: mm, cm, inch/in, pt, px (px requires/uses dpi).
-    """
     from_unit, to_unit = from_unit.lower(), to_unit.lower()
     if from_unit not in _TO_MM:
         raise ValueError(f"unknown from_unit: {from_unit!r}")

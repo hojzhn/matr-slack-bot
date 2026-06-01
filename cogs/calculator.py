@@ -1,20 +1,4 @@
-"""Calculator cog — ``/calc`` opens a modal to compute PrintMon positions.
 
-Flow:
-1. ``/calc`` opens a modal: a unit selector (inch|mm), a machine-origin
-   dropdown, a size dropdown, Width/Height, a Margin dropdown, and Delta X/Y.
-   Origins, sizes, margins and the delta defaults all come from ``config.json``
-   (see ``utils.config``) so they change without touching this code.
-2. Live (re-rendered over Socket Mode):
-   - picking a size preset auto-fills Width/Height (in the selected unit),
-   - picking "Custom…" margin reveals a typed-margin field,
-   - switching units re-labels the inputs and converts the typed values.
-3. On submit, values are validated, converted to mm, and the result is shown in
-   an updated modal view. No extra Slack scope needed (result stays in-modal).
-
-Interactivity is delivered over Socket Mode, so no Request URL is required — but
-the ``/calc`` slash command must still be registered in the app config.
-"""
 
 import json
 
@@ -39,7 +23,7 @@ _NUMBER_FIELDS = ("width", "height", "dx", "dy")
 # --- small helpers ---------------------------------------------------------
 
 def _convert_str(s, from_unit, to_unit):
-    """Convert a numeric *string* between units, leaving blanks/garbage as-is."""
+
     if not s:
         return s
     try:
@@ -62,7 +46,7 @@ def _num(state, block):
 
 
 def _read_form(state):
-    """Snapshot the current modal selections + typed numbers for re-rendering."""
+
     values = {}
     for block in ("width", "height", "margin_custom", "dx", "dy"):
         v = _num(state, block)
@@ -78,13 +62,7 @@ def _read_form(state):
 
 
 def extract_values(state_values, config=None):
-    """Parse a modal's ``state.values`` into floats.
 
-    Returns ``(parsed, errors)``. ``parsed`` has the typed numbers keyed by
-    block_id plus ``"unit"``, ``"origin"`` (selected value) and ``"margin_mm"``
-    (resolved from the selected preset or the custom field). ``errors`` maps
-    block_id -> message (suitable for a ``response_action="errors"`` ack).
-    """
     config = config or load_config()
     parsed = {}
     errors = {}
@@ -122,7 +100,7 @@ def extract_values(state_values, config=None):
 
 
 def compute_from_state(state_values, config=None):
-    """Validate + compute from modal state. Returns ``(result, errors)``."""
+
     config = config or load_config()
     parsed, errors = extract_values(state_values, config)
     if errors:
