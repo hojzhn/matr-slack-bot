@@ -151,5 +151,10 @@
     "created_by_column": "Created By",
     "placeholder_image_url": "https://placehold.co/128x128?text=No+File",
     "column_defaults": {}
+  },
+  "alerts": {
+    "enabled": true,
+    "channel": "C0B6WF3KUD7",
+    "poll_seconds": 15
   }
 }

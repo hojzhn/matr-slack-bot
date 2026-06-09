@@ -63,6 +63,15 @@ class ProjectList:
 
 
 @dataclass(frozen=True)
+class Alerts:
+
+
+    enabled: bool
+    channel: str | None
+    poll_seconds: float
+
+
+@dataclass(frozen=True)
 class Config:
     origins: tuple[Origin, ...]
     default_origin_value: str
@@ -73,6 +82,7 @@ class Config:
     delta_x_mm: float
     delta_y_mm: float
     project_list: ProjectList | None
+    alerts: Alerts | None
 
     def origin(self, value: str) -> Origin:
         return _lookup(self.origins, value, "origin")
@@ -152,6 +162,17 @@ def _parse(raw: dict) -> Config:
         else None
     )
 
+    a = raw.get("alerts")
+    alerts = (
+        Alerts(
+            enabled=bool(a.get("enabled", True)),
+            channel=a.get("channel"),
+            poll_seconds=float(a.get("poll_seconds", 15)),
+        )
+        if a
+        else None
+    )
+
     return Config(
         origins=origins,
         default_origin_value=_default_value(origins, raw["origins"]),
@@ -162,6 +183,7 @@ def _parse(raw: dict) -> Config:
         delta_x_mm=float(defaults.get("delta_x_mm", 0.0)),
         delta_y_mm=float(defaults.get("delta_y_mm", 0.0)),
         project_list=project_list,
+        alerts=alerts,
     )
 
 
