@@ -10,8 +10,6 @@ RENDERABLE_TYPES = {
 }
 
 
-# --- schema parsing --------------------------------------------------------
-
 def parse_columns(file_obj):
     meta = (file_obj or {}).get("list_metadata") or {}
     schema = meta.get("schema") or []
@@ -43,8 +41,6 @@ def parse_columns(file_obj):
 def renderable_columns(columns):
     return [c for c in columns if c["type"] in RENDERABLE_TYPES and (c["type"] != "select" or c["options"])]
 
-
-# --- column selection / config defaults ------------------------------------
 
 def norm(name):
     return "".join((name or "").lower().split())
@@ -129,8 +125,6 @@ def size_targets(project_list, columns):
 def size_fill_ids(size_meta):
     return {col["id"] for key in ("width_col", "height_col") if (col := size_meta.get(key))}
 
-
-# --- value extraction → initial_fields -------------------------------------
 
 def _rich_text(value):
     return [
@@ -231,8 +225,6 @@ def read_select_value(state_values, block, action):
         return None
 
 
-# --- file columns ----------------------------------------------------------
-
 def uploaded_file_ids(state_values, col_id):
     block = state_values.get(col_id, {}).get("value", {}) or {}
     return [f["id"] for f in (block.get("files") or []) if f.get("id")]
@@ -253,8 +245,6 @@ def file_field(col, file_ids, permalink):
         return {"column_id": col["id"], "link": [{"original_url": permalink, "display_as_url": True}]}
     return field_for(col["id"], "text", permalink)
 
-
-# --- size preset -----------------------------------------------------------
 
 def apply_size_preset(fields, size_meta, selected_value, size_presets):
     if not selected_value or selected_value == "custom":
@@ -281,8 +271,6 @@ def size_incomplete(fields, size_meta):
             return True
     return False
 
-
-# --- notification ----------------------------------------------------------
 
 def notification_meta(columns):
     meta = {}

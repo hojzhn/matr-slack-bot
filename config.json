@@ -156,5 +156,10 @@
     "enabled": true,
     "channel": "C0B6WF3KUD7",
     "poll_seconds": 15
+  },
+  "job_alerts": {
+    "enabled": true,
+    "channel": "C0B6WF3KUD7",
+    "poll_seconds": 15
   }
 }

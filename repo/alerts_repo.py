@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import logging
@@ -8,10 +7,6 @@ from repo import db
 log = logging.getLogger(__name__)
 
 
-# Every order_proofs row that hasn't been alerted yet, joined to its order for the
-# order number / size / orientation. The image_url lives on order_proofs itself.
-# `slack_notified IS DISTINCT FROM TRUE` treats both false and NULL as pending.
-# `changed_at` prefers the customer response time, falling back to row timestamps.
 _PENDING_SQL = """
     select
         p.id                as proof_id,
@@ -30,7 +25,6 @@ _PENDING_SQL = """
 
 
 def fetch_pending() -> list[dict]:
-    """Return unalerted order_proofs rows (joined to their order), oldest first."""
     with db.connection() as conn:
         cur = conn.execute(_PENDING_SQL)
         rows = cur.fetchall()
@@ -39,11 +33,6 @@ def fetch_pending() -> list[dict]:
 
 
 def mark_notified(proof_ids) -> None:
-    """Set slack_notified = true for the given order_proofs ids (so no re-alert).
-
-    This UPDATE deliberately changes only slack_notified, so the re-arm trigger
-    (`order_proofs_reset_notified`) leaves it alone and we don't loop.
-    """
     proof_ids = list(proof_ids)
     if not proof_ids:
         return

@@ -1,4 +1,3 @@
-
 import json
 
 from ui.components import size_select_block
@@ -28,7 +27,7 @@ def _input_element(col):
     if col.get("input") == "richtext":
         return _with_placeholder({"type": "rich_text_input", "action_id": "value"}, placeholder)
     if _is_file_input(col):
-        # file_input doesn't support a placeholder.
+
         element = {"type": "file_input", "action_id": "value", "max_files": col.get("max_files", 1)}
         if col.get("filetypes"):
             element["filetypes"] = col["filetypes"]
@@ -38,7 +37,7 @@ def _input_element(col):
     if ctype in ("user", "todo_assignee"):
         return _with_placeholder({"type": "users_select", "action_id": "value"}, placeholder)
     if ctype == "rating":
-        # Star rating, 1–5 (Slack's default scale).
+
         return _with_placeholder(
             {
                 "type": "static_select",
@@ -68,7 +67,7 @@ def _input_element(col):
             "action_id": "value",
             "options": [{"text": {"type": "plain_text", "text": "Yes"}, "value": "true"}],
         }
-    # text / number / email / phone / link -> free text
+
     return _with_placeholder({"type": "plain_text_input", "action_id": "value"}, placeholder)
 
 
@@ -78,7 +77,7 @@ def _col_meta(col):
     if _is_file_input(col):
         meta["input"] = "file"
     elif col.get("input"):
-        meta["input"] = col["input"]  # e.g. "richtext"
+        meta["input"] = col["input"]
     return meta
 
 
@@ -116,7 +115,7 @@ def build_create_modal(
 
 
 def _thumbnail_accessory(thumb, placeholder_url):
-    """Image accessory for the card: the uploaded image, else a placeholder."""
+
     if thumb and thumb.get("id"):
         return {"type": "image", "slack_file": {"id": thumb["id"]}, "alt_text": "attachment"}
     if placeholder_url:

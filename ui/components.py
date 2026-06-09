@@ -1,4 +1,3 @@
-
 def _size_option(preset):
     return {"text": {"type": "plain_text", "text": preset.label[:75]}, "value": preset.value}
 

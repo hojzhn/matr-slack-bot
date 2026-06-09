@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import json
@@ -6,13 +5,12 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
-# config.json lives at the production-support/ root, one level up from utils/.
+
 CONFIG_PATH = Path(__file__).resolve().parent.parent / "config.json"
 
 
 @dataclass(frozen=True)
 class Origin:
-
 
     value: str
     label: str
@@ -22,7 +20,6 @@ class Origin:
 
 @dataclass(frozen=True)
 class SizePreset:
-
 
     value: str
     label: str
@@ -37,7 +34,6 @@ class SizePreset:
 @dataclass(frozen=True)
 class MarginPreset:
 
-
     value: str
     label: str
     margin_mm: float | None
@@ -49,7 +45,6 @@ class MarginPreset:
 
 @dataclass(frozen=True)
 class ProjectList:
-
 
     list_id: str
     command: str
@@ -64,7 +59,6 @@ class ProjectList:
 
 @dataclass(frozen=True)
 class Alerts:
-
 
     enabled: bool
     channel: str | None
@@ -83,6 +77,7 @@ class Config:
     delta_y_mm: float
     project_list: ProjectList | None
     alerts: Alerts | None
+    job_alerts: Alerts | None
 
     def origin(self, value: str) -> Origin:
         return _lookup(self.origins, value, "origin")
@@ -111,6 +106,16 @@ def _default_value(items, raw_items):
 
 def _maybe_float(x):
     return None if x is None else float(x)
+
+
+def _parse_alerts(a: dict | None) -> Alerts | None:
+    if not a:
+        return None
+    return Alerts(
+        enabled=bool(a.get("enabled", True)),
+        channel=a.get("channel"),
+        poll_seconds=float(a.get("poll_seconds", 15)),
+    )
 
 
 def _parse(raw: dict) -> Config:
@@ -162,16 +167,8 @@ def _parse(raw: dict) -> Config:
         else None
     )
 
-    a = raw.get("alerts")
-    alerts = (
-        Alerts(
-            enabled=bool(a.get("enabled", True)),
-            channel=a.get("channel"),
-            poll_seconds=float(a.get("poll_seconds", 15)),
-        )
-        if a
-        else None
-    )
+    alerts = _parse_alerts(raw.get("alerts"))
+    job_alerts = _parse_alerts(raw.get("job_alerts"))
 
     return Config(
         origins=origins,
@@ -184,6 +181,7 @@ def _parse(raw: dict) -> Config:
         delta_y_mm=float(defaults.get("delta_y_mm", 0.0)),
         project_list=project_list,
         alerts=alerts,
+        job_alerts=job_alerts,
     )
 
 

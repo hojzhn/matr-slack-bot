@@ -1,5 +1,3 @@
-
-
 import json
 
 from services.calculator import calculate_position
@@ -16,11 +14,9 @@ from ui.calculator import (
 from utils.config import load_config
 from utils.units import convert
 
-# Number fields the user types into.
+
 _NUMBER_FIELDS = ("width", "height", "dx", "dy")
 
-
-# --- small helpers ---------------------------------------------------------
 
 def _convert_str(s, from_unit, to_unit):
 
@@ -31,8 +27,6 @@ def _convert_str(s, from_unit, to_unit):
     except (TypeError, ValueError):
         return s
 
-
-# --- state reading (testable, no Slack client needed) ----------------------
 
 def _selected(state, block, action_id):
     return state[block][action_id]["selected_option"]["value"]
@@ -78,7 +72,6 @@ def extract_values(state_values, config=None):
         except (TypeError, ValueError):
             errors[block] = "Enter a number"
 
-    # Margin: a fixed preset (already mm) or a custom value typed in `unit`.
     preset = config.margin_preset(_selected(state_values, "margin", MARGIN_ACTION_ID))
     if preset.is_custom:
         raw = _num(state_values, "margin_custom")
@@ -120,8 +113,6 @@ def compute_from_state(state_values, config=None):
     return result, {}
 
 
-# --- registration ----------------------------------------------------------
-
 def register(app):
     @app.command("/calc")
     def open_calc(ack, body, client):
@@ -130,7 +121,7 @@ def register(app):
 
     @app.action(UNIT_ACTION_ID)
     def on_unit_change(ack, body, client):
-        """Re-label inputs and convert the typed values to the new unit."""
+
         ack()
         view = body["view"]
         form = _read_form(view["state"]["values"])
@@ -144,7 +135,7 @@ def register(app):
 
     @app.action(SIZE_ACTION_ID)
     def on_size_change(ack, body, client):
-        """Auto-fill width/height (in the selected unit) from the chosen size."""
+
         ack()
         view = body["view"]
         form = _read_form(view["state"]["values"])
@@ -157,7 +148,7 @@ def register(app):
 
     @app.action(MARGIN_ACTION_ID)
     def on_margin_change(ack, body, client):
-        """Re-render so the Custom margin field shows/hides live."""
+
         ack()
         view = body["view"]
         form = _read_form(view["state"]["values"])

@@ -1,7 +1,6 @@
-
 MM_PER_INCH = 25.4
 POINTS_PER_INCH = 72.0
-DEFAULT_DPI = 150  # common print resolution; pass dpi explicitly when known
+DEFAULT_DPI = 150
 
 
 def inch_to_mm(inches):
@@ -21,16 +20,15 @@ def mm_to_pt(mm):
 
 
 def px_to_mm(pixels, dpi=DEFAULT_DPI):
-    """Convert pixels to mm at the given dots-per-inch."""
+
     return pixels / dpi * MM_PER_INCH
 
 
 def mm_to_px(mm, dpi=DEFAULT_DPI):
-    """Convert mm to pixels at the given dots-per-inch."""
+
     return mm / MM_PER_INCH * dpi
 
 
-# Generic dispatch so callers can convert by name, e.g. convert(10, "inch", "mm").
 _TO_MM = {
     "mm": lambda v, dpi: v,
     "cm": lambda v, dpi: v * 10.0,

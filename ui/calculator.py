@@ -1,11 +1,10 @@
-
 import json
 
 from ui.components import size_select_block
 
 CALLBACK_ID = "calc_submit"
 
-# Distinct action ids so each select dispatches its own block action.
+
 UNIT_ACTION_ID = "unit_select"
 ORIGIN_ACTION_ID = "origin_select"
 SIZE_ACTION_ID = "size_select"
@@ -13,7 +12,7 @@ MARGIN_ACTION_ID = "margin_select"
 
 
 def fmt(x):
-    """Format a float for an input's initial value (trim trailing zeros)."""
+
     return f"{x:g}"
 
 
@@ -80,7 +79,7 @@ def build_input_modal(
         {
             "type": "input",
             "block_id": "unit",
-            "dispatch_action": True,  # re-label + convert on change
+            "dispatch_action": True,
             "label": {"type": "plain_text", "text": "Units for width / height / custom margin"},
             "element": {
                 "type": "radio_buttons",
@@ -111,7 +110,7 @@ def build_input_modal(
 
     blocks += [
         {"type": "divider"},
-        
+
         _select_block("origin", ORIGIN_ACTION_ID, "Machine origin", config.origins, origin),
 
         _select_block(
@@ -128,7 +127,7 @@ def build_input_modal(
     return {
         "type": "modal",
         "callback_id": CALLBACK_ID,
-        # Remember the active unit so a unit switch knows what to convert *from*.
+
         "private_metadata": json.dumps({"unit": u}),
         "title": {"type": "plain_text", "text": "PrintMon Calculator"},
         "submit": {"type": "plain_text", "text": "Calculate"},
