@@ -76,8 +76,9 @@ class Config:
     delta_x_mm: float
     delta_y_mm: float
     project_list: ProjectList | None
-    alerts: Alerts | None
-    job_alerts: Alerts | None
+    proof_alerts: Alerts | None
+    order_alerts: Alerts | None
+    submission_alerts: Alerts | None
 
     def origin(self, value: str) -> Origin:
         return _lookup(self.origins, value, "origin")
@@ -167,8 +168,9 @@ def _parse(raw: dict) -> Config:
         else None
     )
 
-    alerts = _parse_alerts(raw.get("alerts"))
-    job_alerts = _parse_alerts(raw.get("job_alerts"))
+    proof_alerts = _parse_alerts(raw.get("proof_alerts"))
+    order_alerts = _parse_alerts(raw.get("order_alerts"))
+    submission_alerts = _parse_alerts(raw.get("submission_alerts"))
 
     return Config(
         origins=origins,
@@ -180,8 +182,9 @@ def _parse(raw: dict) -> Config:
         delta_x_mm=float(defaults.get("delta_x_mm", 0.0)),
         delta_y_mm=float(defaults.get("delta_y_mm", 0.0)),
         project_list=project_list,
-        alerts=alerts,
-        job_alerts=job_alerts,
+        proof_alerts=proof_alerts,
+        order_alerts=order_alerts,
+        submission_alerts=submission_alerts,
     )
 
 

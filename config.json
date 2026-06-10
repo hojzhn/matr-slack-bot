@@ -152,14 +152,19 @@
     "placeholder_image_url": "https://placehold.co/128x128?text=No+File",
     "column_defaults": {}
   },
-  "alerts": {
+  "proof_alerts": {
     "enabled": true,
-    "channel": "C0B6WF3KUD7",
+    "channel": "C0B9HPU46PM",
     "poll_seconds": 15
   },
-  "job_alerts": {
+  "order_alerts": {
     "enabled": true,
-    "channel": "C0B6WF3KUD7",
+    "channel": "C0B9HPSFPNF",
+    "poll_seconds": 15
+  },
+  "submission_alerts": {
+    "enabled": true,
+    "channel": "C0BAJDRF7C0",
     "poll_seconds": 15
   }
 }
