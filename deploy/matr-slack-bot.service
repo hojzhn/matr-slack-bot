@@ -1,0 +1,21 @@
+[Unit]
+Description=MATR Slack bot (Bolt, Socket Mode)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Adjust User to match the droplet. Run as a non-root user if you can.
+User=slackbot
+# The GitHub repo root contains app.py directly (it was created from production-support/).
+WorkingDirectory=/opt/matr-slack-bot
+EnvironmentFile=/opt/matr-slack-bot/.env
+ExecStart=/opt/matr-slack-bot/.venv/bin/python app.py
+Restart=always
+RestartSec=5
+# Send stdout/stderr to the journal (view with: journalctl -u matr-slack-bot)
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
