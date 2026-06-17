@@ -10,14 +10,30 @@ def describe_job(row: dict) -> dict:
 
 def _describe_shopify(row: dict) -> dict:
     order_number = row.get("order_number") or "?"
+    noun = "Shopify Order" if _is_shopify(row.get("source")) else "Job Row"
+    qualifier = _purpose_qualifier(row.get("purpose"))
+    label = f"{qualifier} {noun}" if qualifier else noun
     size_line = " / ".join(_cap(x) for x in (row.get("size"), row.get("orientation")) if x) or None
     return {
-        "headline": f"[{order_number}] New Shopify Order!",
+        "headline": f"[{order_number}] New {label}!",
         "body_lines": [size_line] if size_line else [],
         "when": _format_ts(row.get("created_at")),
         "thumbnail_url": row.get("order_image_url") or None,
         "thumbnail_alt": f"Order {order_number}",
     }
+
+
+def _is_shopify(source) -> bool:
+
+    return str(source or "").strip().lower() == "shopify"
+
+
+def _purpose_qualifier(purpose) -> str | None:
+
+    val = str(purpose or "").strip()
+    if not val or val.lower() == "paid":
+        return None
+    return _cap(val)
 
 
 def _describe_direct(row: dict) -> dict:

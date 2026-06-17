@@ -13,6 +13,8 @@ _PENDING_SQL = """
         j.order_id          as order_id,
         j.direct_request_id as direct_request_id,
         o.order_number      as order_number,
+        o.source            as source,
+        o.purpose           as purpose,
         o.size              as size,
         o.orientation       as orientation,
         (
