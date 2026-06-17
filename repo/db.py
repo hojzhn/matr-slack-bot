@@ -18,8 +18,8 @@ def is_configured() -> bool:
 
 
 def _configure(conn):
-
     conn.autocommit = True
+    conn.prepare_threshold = None   # no server-side prepared statements (PgBouncer txn pooler)
 
 
 def get_pool():
