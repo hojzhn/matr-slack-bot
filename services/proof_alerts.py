@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from utils.images import thumbnail_url
+
 
 _RESULT_LABELS = {
     "approved": "Image Approved",
@@ -25,7 +27,7 @@ def describe_proof(row: dict) -> dict:
         "size_line": size_line,
         "when": _format_ts(row.get("changed_at")),
         "note": note,
-        "image_url": image_url,
+        "image_url": thumbnail_url(image_url, width=600),
         "filename": _filename(image_url),
     }
 

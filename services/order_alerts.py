@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from utils.images import thumbnail_url
+
 
 def describe_job(row: dict) -> dict:
 
@@ -18,7 +20,7 @@ def _describe_shopify(row: dict) -> dict:
         "headline": f"[{order_number}] New {label}!",
         "body_lines": [size_line] if size_line else [],
         "when": _format_ts(row.get("created_at")),
-        "thumbnail_url": row.get("order_image_url") or None,
+        "thumbnail_url": thumbnail_url(row.get("order_image_url")) or None,
         "thumbnail_alt": f"Order {order_number}",
     }
 

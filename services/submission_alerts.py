@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from utils.images import thumbnail_url
+
 
 def describe_submission(row: dict) -> dict:
 
@@ -32,7 +34,7 @@ def describe_submission(row: dict) -> dict:
         "detail_lines": detail_lines,
         "description": description,
         "when": _format_ts(row.get("created_at")),
-        "image_url": image_url,
+        "image_url": thumbnail_url(image_url, width=600),
         "image_name": image_name,
     }
 

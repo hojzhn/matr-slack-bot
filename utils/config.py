@@ -79,6 +79,7 @@ class Config:
     proof_alerts: Alerts | None
     order_alerts: Alerts | None
     submission_alerts: Alerts | None
+    printing_alerts: Alerts | None
 
     def origin(self, value: str) -> Origin:
         return _lookup(self.origins, value, "origin")
@@ -171,6 +172,7 @@ def _parse(raw: dict) -> Config:
     proof_alerts = _parse_alerts(raw.get("proof_alerts"))
     order_alerts = _parse_alerts(raw.get("order_alerts"))
     submission_alerts = _parse_alerts(raw.get("submission_alerts"))
+    printing_alerts = _parse_alerts(raw.get("printing_alerts"))
 
     return Config(
         origins=origins,
@@ -185,6 +187,7 @@ def _parse(raw: dict) -> Config:
         proof_alerts=proof_alerts,
         order_alerts=order_alerts,
         submission_alerts=submission_alerts,
+        printing_alerts=printing_alerts,
     )
 
 

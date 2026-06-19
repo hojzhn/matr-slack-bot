@@ -166,5 +166,10 @@
     "enabled": true,
     "channel": "C0BAJDRF7C0",
     "poll_seconds": 15
+  },
+  "printing_alerts": {
+    "enabled": true,
+    "channel": "C0B6WF3KUD7",
+    "poll_seconds": 15
   }
 }
